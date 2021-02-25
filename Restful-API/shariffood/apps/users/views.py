@@ -91,6 +91,22 @@ class ForgotPasswordView(GenericAPIView):
         return Response({'detail': 'Successfully Sent Reset Password Email'}, status=200)
 
 
+class ForgetPasswordConfirmView(GenericAPIView):
+    serializer_class = ForgotPasswordSerializer
+
+    def post(self, request):
+        data = self.get_serializer(request.data).data
+
+        rs_token = get_object_or_404(ForgotPasswordToken, uid=data['uid'], token=data['token'])
+        if (timezone.now() - rs_token.expiration_date).total_seconds() > 24 * 60 * 60:
+            return Response({'error': 'Token Expired'}, status=400)
+
+        user = get_object_or_404(User, id=urlsafe_base64_decode(data['uid']).decode('utf-8'))
+        user.password = make_password(data['new_password1'])
+        user.save()
+        return Response({'detail': 'Successfully Changed Password'}, status=200)
+
+
 class ChangePassword(GenericAPIView):
     serializer_class = ChangePasswordSerializer
     permission_classes = [IsAuthenticated]

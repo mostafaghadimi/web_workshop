@@ -1,23 +1,20 @@
 from django.urls import path
 from rest_framework import routers
-from .views import *
+from rest_framework_simplejwt import views as jwt_views
+from . import views
 
-app_name = 'users'
-
-router = routers.DefaultRouter()
-router.include_root_view = False
-
-router.register('register', RegisterView, basename='register')
+app_name = 'account'
 
 urlpatterns = [
-    # path('login', jwt_views.TokenObtainPairView.as_view(),
-    #      name='token_obtain_pair'),
-    # path('token/refresh', jwt_views.TokenRefreshView.as_view(),
-    #      name='token_refresh'),
-    path('password-update', ChangePassword.as_view(), name='password_update'),
-    path('password/reset', ForgotPasswordView.as_view()),
-    # path('password/reset/confirm', .as_view()), #TODO : plz correct the view
-    path('activate/<slug:eid>/<slug:token>', ActivateView.as_view()),
-    path('logout', LogoutView.as_view()),
+    path('login', jwt_views.TokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('token/refresh', jwt_views.TokenRefreshView.as_view(),
+         name='token_refresh'),
+    path('password-update', views.ChangePassword.as_view(), name='password_update'),
+    path('password/reset', views.ForgotPasswordView.as_view()),
+    path('password/reset/confirm', views.ForgetPasswordConfirmView.as_view()),
+    path('activate/<slug:eid>/<slug:token>', views.ActivateView.as_view()),
+    path('logout', views.LogoutView.as_view()),
+    path('signup', views.SignUpView.as_view()),
 
 ]
