@@ -1,7 +1,7 @@
 asgiref==3.2.7
 Django==3.0.6
 django-cors-headers==3.3.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 gunicorn==20.0.4
 pytz==2020.1
 sqlparse==0.3.1
